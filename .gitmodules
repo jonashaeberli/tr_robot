@@ -1,0 +1,3 @@
+[submodule "hardware/ODrive-CAN"]
+	path = hardware/ODrive-CAN
+	url = git@github.com:HDJGJonas/ODrive-CAN.git
