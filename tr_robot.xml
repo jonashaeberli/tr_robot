@@ -1,0 +1,16 @@
+<library path="tr_robot">
+  <class name="tr_robot/RobotSystem"
+         type="tr_robot::RobotSystem"
+         base_class_type="hardware_interface::SystemInterface">
+    <description>
+      Robot hardware plugin for 6 dof robot tutorial.
+    </description>
+  </class>
+  <class name="tr_robot/RobotController"
+         type="tr_robot::RobotController"
+         base_class_type="controller_interface::ControllerInterface">
+    <description>
+      Robot controller plugin for 6 dof robot tutorial.
+    </description>
+  </class>
+</library>
