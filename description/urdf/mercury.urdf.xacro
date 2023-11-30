@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://wiki.ros.org/xacro" name="mercury">
+
+  <!-- Import mercury macro -->
+  <xacro:include filename="mercury_description.urdf.xacro"/>
+
+  <!-- create link fixed to the "world" -->
+  <link name="world"/>
+
+  <xacro:r6bot_description/>
+
+  <!-- Import mercury ros2_control description -->
+  <xacro:include filename="$(find description)/ros2_control/mercury.ros2_control.xacro" />
+  <xacro:mercury_ros2_control name="mercury"/>
+
+</robot>
