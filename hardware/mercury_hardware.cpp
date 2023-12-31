@@ -120,7 +120,7 @@ return_type RobotSystem::read(const rclcpp::Time & /*time*/, const rclcpp::Durat
 
 return_type RobotSystem::write(const rclcpp::Time &, const rclcpp::Duration &)
 {
-  punning.f = joint_position_command_[0] * 25;
+  punning.f = joint_position_command_[0] * 100;
   Hndl.SetInputPos(1, punning.u, 0, 0);
   return return_type::OK;
 }

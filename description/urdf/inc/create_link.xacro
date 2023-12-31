@@ -10,13 +10,13 @@
       <visual>
         <origin xyz="${xyz_offset}" rpy="${rpy_offset}"/>
         <geometry>
-          <mesh filename="package://tr_robot/meshes/${mesh_name}.stl" scale="0.001 0.001 0.001"/>
+          <mesh filename="package://tr_robot/description/meshes/${mesh_name}.stl" scale="0.001 0.001 0.001"/>
         </geometry>
       </visual>
       <collision>
         <origin xyz="${xyz_offset}" rpy="${rpy_offset}"/>
         <geometry>
-          <mesh filename="package://tr_robot/meshes/${mesh_name}.stl" scale="0.001 0.001 0.001"/>
+          <mesh filename="package://tr_robot/description/meshes/${mesh_name}.stl" scale="0.001 0.001 0.001"/>
         </geometry>
       </collision>
       <inertial>

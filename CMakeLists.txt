@@ -81,7 +81,7 @@ install(
   DESTINATION include/tr_robot
 )
 install(
-  DIRECTORY description/launch description/ros2_control description/urdf
+  DIRECTORY description/launch description/ros2_control description/urdf description/meshes
   DESTINATION share/tr_robot
 )
 install(

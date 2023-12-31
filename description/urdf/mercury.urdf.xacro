@@ -7,10 +7,10 @@
   <!-- create link fixed to the "world" -->
   <link name="world"/>
 
-  <xacro:r6bot_description/>
+  <xacro:mercury_description/>
 
   <!-- Import mercury ros2_control description -->
-  <xacro:include filename="$(find description)/ros2_control/mercury.ros2_control.xacro" />
-  <xacro:mercury_ros2_control name="mercury"/>
+  <!-- <xacro:include filename="$(find description)/ros2_control/mercury.ros2_control.xacro" />
+  <xacro:mercury_ros2_control name="mercury"/> -->
 
 </robot>
