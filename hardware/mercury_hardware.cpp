@@ -24,16 +24,18 @@ CallbackReturn RobotSystem::on_init(const hardware_interface::HardwareInfo & inf
   {
     return CallbackReturn::ERROR;
   }
+ 
+  // robot has 6 joints and therefore we inistialize for every key a vector with 6 values
+  const int vectorSize = 6; // Size of the vector
 
-  // robot has 6 joints and 2 interfaces
-  joint_position_.assign(6, 0);
-  joint_velocities_.assign(6, 0);
-  joint_position_command_.assign(6, 0);
-  joint_velocities_command_.assign(6, 0);
+  // Initialize vectors with default values
+  for (auto& entry : joint_command_interfaces) {
+    entry.second.assign(vectorSize, 0.0);
+  }
 
-  // force sensor has 6 readings
-  ft_states_.assign(6, 0);
-  ft_command_.assign(6, 0);
+  for (auto& entry : joint_interfaces) {
+    entry.second.assign(vectorSize, 0.0);
+  }
 
   for (const auto & joint : info_.joints)
   {
@@ -42,8 +44,6 @@ CallbackReturn RobotSystem::on_init(const hardware_interface::HardwareInfo & inf
       joint_interfaces[interface.name].push_back(joint.name);
     }
   }
-
-  Hndl.SetAxisRequestedState(1, CLOSED_LOOP_CONTROL);
 
   return CallbackReturn::SUCCESS;
 }
@@ -64,12 +64,11 @@ std::vector<hardware_interface::StateInterface> RobotSystem::export_state_interf
     state_interfaces.emplace_back(joint_name, "velocity", &joint_velocities_[ind++]);
   }
 
-  state_interfaces.emplace_back("tcp_fts_sensor", "force.x", &ft_states_[0]);
-  state_interfaces.emplace_back("tcp_fts_sensor", "force.y", &ft_states_[1]);
-  state_interfaces.emplace_back("tcp_fts_sensor", "force.z", &ft_states_[2]);
-  state_interfaces.emplace_back("tcp_fts_sensor", "torque.x", &ft_states_[3]);
-  state_interfaces.emplace_back("tcp_fts_sensor", "torque.y", &ft_states_[4]);
-  state_interfaces.emplace_back("tcp_fts_sensor", "torque.z", &ft_states_[5]);
+  ind = 0;
+  for (const auto & joint_name : joint_interfaces["acceleration"])
+  {
+    state_interfaces.emplace_back(joint_name, "acceleration", &joint_velocities_[ind++]);
+  }
 
   return state_interfaces;
 }
@@ -79,23 +78,22 @@ std::vector<hardware_interface::CommandInterface> RobotSystem::export_command_in
   std::vector<hardware_interface::CommandInterface> command_interfaces;
 
   int ind = 0;
-  for (const auto & joint_name : joint_interfaces["position"])
+  for (const auto & joint_name : joint_command_interfaces["position"])
   {
     command_interfaces.emplace_back(joint_name, "position", &joint_position_command_[ind++]);
   }
 
   ind = 0;
-  for (const auto & joint_name : joint_interfaces["velocity"])
+  for (const auto & joint_name : joint_command_interfaces["velocity"])
   {
     command_interfaces.emplace_back(joint_name, "velocity", &joint_velocities_command_[ind++]);
   }
 
-  command_interfaces.emplace_back("tcp_fts_sensor", "force.x", &ft_command_[0]);
-  command_interfaces.emplace_back("tcp_fts_sensor", "force.y", &ft_command_[1]);
-  command_interfaces.emplace_back("tcp_fts_sensor", "force.z", &ft_command_[2]);
-  command_interfaces.emplace_back("tcp_fts_sensor", "torque.x", &ft_command_[3]);
-  command_interfaces.emplace_back("tcp_fts_sensor", "torque.y", &ft_command_[4]);
-  command_interfaces.emplace_back("tcp_fts_sensor", "torque.z", &ft_command_[5]);
+  ind = 0;
+  for (const auto & joint_name : joint_command_interfaces["acceleration"])
+  {
+    command_interfaces.emplace_back(joint_name, "acceleration", &joint_velocities_command_[ind++]);
+  }
 
   return command_interfaces;
 }

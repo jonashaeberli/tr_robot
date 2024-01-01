@@ -47,24 +47,34 @@ public:
   return_type write(const rclcpp::Time & /*time*/, const rclcpp::Duration & /*period*/) override;
 
 protected:
-  /// The size of this vector is (standard_interfaces_.size() x nr_joints)
-  std::vector<double> joint_position_command_;
-  std::vector<double> joint_velocities_command_;
-  std::vector<double> joint_position_;
-  std::vector<double> joint_velocities_;
-  std::vector<double> ft_states_;
-  std::vector<double> ft_command_;
 
   ODrive::ODrive Hndl;
 
-  std::unordered_map<std::string, std::vector<std::string>> joint_interfaces = {
-    {"position", {}}, {"velocity", {}}};
+/// Here we create two maps that store the values of the input command beeing sent to the controller and the values read from the controllers...
+
+  std::unordered_map<std::string, std::vector<std::double>> joint_command_interfaces = {
+    {"position", {}}, {"velocity", {}}, {"acceleration", {}}};
+
+  std::unordered_map<std::string, std::vector<std::double>> joint_interfaces = {
+    {"position", {}}, {"velocity", {}}, {"acceleration", {}}};
 
   union
   {
     float f;
     uint32_t u;
-  }punning;
+  }punning_position;
+
+  union
+  {
+    float f;
+    uint32_t u;
+  }punning_velocity;
+
+  union
+  {
+    float f;
+    uint32_t u;
+  }punning_acceleration;
   
 };
 
