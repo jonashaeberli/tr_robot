@@ -75,6 +75,11 @@ protected:
     float f;
     uint32_t u;
   }punning_acceleration;
+
+  typedef struct {
+    uint32_t Position;
+    uint32_t Velocity;
+} EncoderEstimates;
   
 };
 

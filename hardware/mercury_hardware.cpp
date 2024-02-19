@@ -100,26 +100,28 @@ std::vector<hardware_interface::CommandInterface> RobotSystem::export_command_in
 
 return_type RobotSystem::read(const rclcpp::Time & /*time*/, const rclcpp::Duration & period)
 {
-  // TODO(pac48) set sensor_states_ values from subscriber
+    for (int i = 0; i < 6; i++) {
+      EncoderEstimates estimates = Hndl.GetEncoderEstimate(i);
 
-  for (auto i = 0ul; i < joint_velocities_command_.size(); i++)
-  {
-    joint_velocities_[i] = joint_velocities_command_[i];
-    joint_position_[i] += joint_velocities_command_[i] * period.seconds();
-  }
+      punning_position.u = estimates.Position;
+      punning_velocity.u = estimates.Velocity;
 
-  for (auto i = 0ul; i < joint_position_command_.size(); i++)
-  {
-    joint_position_[i] = joint_position_command_[i];
-  }
+      joint_interfaces["position"][i] = punning_position.f / 100;
+      joint_interfaces["velocity"][i] = punning_velocity.f / 100;
+    }
 
   return return_type::OK;
 }
 
 return_type RobotSystem::write(const rclcpp::Time &, const rclcpp::Duration &)
 {
-  punning.f = joint_position_command_[0] * 100;
-  Hndl.SetInputPos(1, punning.u, 0, 0);
+  for (int i = 0; i < 6; i++) {
+    double punning_position.f = joint_command_interfaces["position"][i] * 100;
+    double punning_velocity.f = joint_command_interfaces["velocity"][i] * 100;
+    double punning_acceleration.f = joint_command_interfaces["acceleration"][i] * 100;
+
+    Hndl.SetInputPos(i, punning_position.u, punning_velocity.u, punning_acceleration.u);
+  }
   return return_type::OK;
 }
 
